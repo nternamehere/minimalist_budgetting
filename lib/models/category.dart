@@ -6,7 +6,7 @@ import 'package:minimalist_budgetting/models/expense.dart';
 // dart run build_runner build to rebuild
 part 'category.g.dart';
 
-@collection
+@Collection(accessor: 'categories')
 class Category {
   Id id = Isar.autoIncrement;
   String name;
