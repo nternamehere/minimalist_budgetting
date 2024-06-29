@@ -10,7 +10,8 @@ class Expense {
   Id id = Isar.autoIncrement;
   String detail;
   double value;
-  final category = IsarLink<Category>();
+  DateTime date;
+  // final category = IsarLink<Category>();
 
-  Expense({required this.detail, required this.value});
+  Expense({required this.detail, required this.value, required this.date});
 }

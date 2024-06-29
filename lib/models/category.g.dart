@@ -35,13 +35,6 @@ const CategorySchema = CollectionSchema(
   idName: r'id',
   indexes: {},
   links: {
-    r'expenses': LinkSchema(
-      id: 8414127524801899185,
-      name: r'expenses',
-      target: r'Expense',
-      single: false,
-      linkName: r'category',
-    ),
     r'budgets': LinkSchema(
       id: 7402937950162968350,
       name: r'budgets',
@@ -112,12 +105,11 @@ Id _categoryGetId(Category object) {
 }
 
 List<IsarLinkBase<dynamic>> _categoryGetLinks(Category object) {
-  return [object.expenses, object.budgets];
+  return [object.budgets];
 }
 
 void _categoryAttach(IsarCollection<dynamic> col, Id id, Category object) {
   object.id = id;
-  object.expenses.attach(col, col.isar.collection<Expense>(), r'expenses', id);
   object.budgets.attach(col, col.isar.collection<Budget>(), r'budgets', id);
 }
 
@@ -396,64 +388,6 @@ extension CategoryQueryObject
 
 extension CategoryQueryLinks
     on QueryBuilder<Category, Category, QFilterCondition> {
-  QueryBuilder<Category, Category, QAfterFilterCondition> expenses(
-      FilterQuery<Expense> q) {
-    return QueryBuilder.apply(this, (query) {
-      return query.link(q, r'expenses');
-    });
-  }
-
-  QueryBuilder<Category, Category, QAfterFilterCondition> expensesLengthEqualTo(
-      int length) {
-    return QueryBuilder.apply(this, (query) {
-      return query.linkLength(r'expenses', length, true, length, true);
-    });
-  }
-
-  QueryBuilder<Category, Category, QAfterFilterCondition> expensesIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.linkLength(r'expenses', 0, true, 0, true);
-    });
-  }
-
-  QueryBuilder<Category, Category, QAfterFilterCondition> expensesIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.linkLength(r'expenses', 0, false, 999999, true);
-    });
-  }
-
-  QueryBuilder<Category, Category, QAfterFilterCondition>
-      expensesLengthLessThan(
-    int length, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.linkLength(r'expenses', 0, true, length, include);
-    });
-  }
-
-  QueryBuilder<Category, Category, QAfterFilterCondition>
-      expensesLengthGreaterThan(
-    int length, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.linkLength(r'expenses', length, include, 999999, true);
-    });
-  }
-
-  QueryBuilder<Category, Category, QAfterFilterCondition> expensesLengthBetween(
-    int lower,
-    int upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.linkLength(
-          r'expenses', lower, includeLower, upper, includeUpper);
-    });
-  }
-
   QueryBuilder<Category, Category, QAfterFilterCondition> budgets(
       FilterQuery<Budget> q) {
     return QueryBuilder.apply(this, (query) {

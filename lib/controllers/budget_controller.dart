@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:isar/isar.dart';
 import 'package:minimalist_budgetting/models/budget.dart';
+import 'package:minimalist_budgetting/models/category.dart';
 import 'package:path_provider/path_provider.dart';
 
 class BudgetController extends ChangeNotifier {
@@ -9,7 +10,7 @@ class BudgetController extends ChangeNotifier {
 
   static Future<void> initialize() async {
     final dir = await getApplicationDocumentsDirectory();
-    isar = await Isar.open([BudgetSchema], directory: dir.path);
+    isar = await Isar.open([BudgetSchema, CategorySchema], directory: dir.path);
   }
 
   List<Budget> get budgets => _budgets;
