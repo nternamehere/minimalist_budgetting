@@ -12,8 +12,8 @@ class Category {
   String name;
   bool archived = false;
 
-  @Backlink(to: 'category')
-  final expenses = IsarLinks<Expense>();
+  // @Backlink(to: 'category')
+  // final expenses = IsarLinks<Expense>();
 
   @Backlink(to: 'category')
   final budgets = IsarLinks<Budget>();

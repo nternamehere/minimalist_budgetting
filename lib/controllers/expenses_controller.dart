@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:isar/isar.dart';
+import 'package:minimalist_budgetting/models/budget.dart';
+import 'package:minimalist_budgetting/models/category.dart';
 import 'package:minimalist_budgetting/models/expense.dart';
 import 'package:path_provider/path_provider.dart';
 

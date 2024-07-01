@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:isar/isar.dart';
+import 'package:minimalist_budgetting/models/budget.dart';
 import 'package:minimalist_budgetting/models/category.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -9,7 +10,7 @@ class CategoryController extends ChangeNotifier {
 
   static Future<void> initialize() async {
     final dir = await getApplicationDocumentsDirectory();
-    isar = await Isar.open([CategorySchema], directory: dir.path);
+    isar = await Isar.open([CategorySchema, BudgetSchema], directory: dir.path);
   }
 
   List<Category> get categories => _categories;
