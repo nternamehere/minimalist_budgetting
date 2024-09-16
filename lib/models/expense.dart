@@ -1,5 +1,4 @@
 import 'package:isar/isar.dart';
-import 'package:minimalist_budgetting/models/category.dart';
 
 // Generated isar file
 // dart run build_runner build to rebuild

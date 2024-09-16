@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:isar/isar.dart';
-import 'package:minimalist_budgetting/models/budget.dart';
-import 'package:minimalist_budgetting/models/category.dart';
 import 'package:minimalist_budgetting/models/expense.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -52,5 +50,33 @@ class ExpenseController extends ChangeNotifier {
     _expenses.addAll(expenses);
 
     notifyListeners();
+  }
+
+  Future<Map<int, double>> calculateMonthlyTotals() async {
+    await list();
+
+    Map<int, double> monthlyTotals = {};
+
+    for (var expense in _expenses) {
+      int month = expense.date.month;
+
+      if (!monthlyTotals.containsKey(month)) {
+        monthlyTotals[month] = 0;
+      }
+
+      monthlyTotals[month] = monthlyTotals[month]! + expense.value;
+    }
+
+    return monthlyTotals;
+  }
+
+  DateTime startDateTime() {
+    if (_expenses.isEmpty) {
+      return DateTime.now();
+    }
+
+    _expenses.sort((a, b) => a.date.compareTo(b.date));
+
+    return _expenses.first.date;
   }
 }

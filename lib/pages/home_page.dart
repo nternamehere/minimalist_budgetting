@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:minimalist_budgetting/bar_graph/bar_graph.dart';
 import 'package:minimalist_budgetting/widgets/expense_tile.dart';
 import 'package:provider/provider.dart';
 import 'package:minimalist_budgetting/controllers/expenses_controller.dart';
@@ -19,11 +20,19 @@ class _HomePageState extends State<HomePage> {
   TextEditingController dateController =
       TextEditingController(text: currentDate());
 
+  Future<Map<int,double>>? _monthlyTotalsFuture;
+
   @override
   void initState() {
     Provider.of<ExpenseController>(context, listen: false).list();
 
+    refreshGraphData();
+
     super.initState();
+  }
+
+  void refreshGraphData() {
+    _monthlyTotalsFuture = Provider.of<ExpenseController>(context, listen: false).calculateMonthlyTotals();
   }
 
   void openNewExpenseBox() {
@@ -135,24 +144,56 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Consumer<ExpenseController>(
-      builder: (context, value, child) => Scaffold(
-        floatingActionButton: FloatingActionButton(
-          onPressed: openNewExpenseBox,
-          child: const Icon(Icons.add),
-        ),
-        body: ListView.builder(
-          itemCount: value.expenses.length,
-          itemBuilder: (context, index) {
-            Expense expense = value.expenses[index];
-            return ExpenseTile(
-              title: expense.detail,
-              value: formatValue(expense.value),
-              onDeletePressed: (context) => openDeleteBox(expense),
-              onEditPressed: (context) => openEditBox(expense),
-            );
-          },
+      builder: (context, value, child) {
+        DateTime startDateTime = value.startDateTime();
+        DateTime now = DateTime.now();
+
+        int monthCount = calculateMonthCount(now, startDateTime);
+
+        return Scaffold(
+          floatingActionButton: FloatingActionButton(
+            onPressed: openNewExpenseBox,
+            child: const Icon(Icons.add),
+          ),
+          body: SafeArea(
+            child: Column(
+              children: [
+                SizedBox(
+                  height: 250,
+                  child: FutureBuilder(
+                    future: _monthlyTotalsFuture,
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.done) {
+                        final monthlyTotals = snapshot.data ?? {};
+                  
+                        List<double> monthlySummary = List.generate(monthCount, (index) => monthlyTotals[startDateTime.month + index] ?? 0.0);
+                  
+                        return BarGraph(monthlySummary: monthlySummary, startMonth: startDateTime.month);
+                      }
+                  
+                      return const Center(child: Text("Loading"));
+                    }
+                  ),
+                ),
+                Expanded(
+                  child: ListView.builder(
+                          itemCount: value.expenses.length,
+                          itemBuilder: (context, index) {
+                            Expense expense = value.expenses[index];
+                            return ExpenseTile(
+                              title: expense.detail,
+                              value: formatValue(expense.value),
+                              onDeletePressed: (context) => openDeleteBox(expense),
+                              onEditPressed: (context) => openEditBox(expense),
+                            );
+                          },
+                        ),
+                ),
+              ]
+            ),
           )
-      )
+        );
+      }
     );
   }
 
@@ -169,6 +210,7 @@ class _HomePageState extends State<HomePage> {
           Expense expense = Expense(date: dateFromString(date), detail: detail, value: stringToDouble(value));
           await context.read<ExpenseController>().create(expense);
 
+          refreshGraphData();
           _resetTextControllers();
         }
       },
@@ -189,6 +231,7 @@ class _HomePageState extends State<HomePage> {
           Expense updatedExpense = Expense(date: dateFromString(date), detail: detail, value: stringToDouble(value));
           await context.read<ExpenseController>().update(expense.id, updatedExpense);
 
+          refreshGraphData();
           _resetTextControllers();
         }
       },
@@ -211,6 +254,7 @@ class _HomePageState extends State<HomePage> {
       onPressed: () async {
         Navigator.pop(context);
         await context.read<ExpenseController>().delete(expense.id);
+        refreshGraphData();
       },
       child: const Text('Delete'),
     );
