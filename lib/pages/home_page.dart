@@ -149,7 +149,6 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Consumer<ExpenseController>(builder: (context, value, child) {
-      DateTime startDateTime = value.startDateTime();
       DateTime now = DateTime.now();
 
       List<Expense> currentMonthExpenses = value.expenses.where((expense) {
@@ -193,20 +192,24 @@ class _HomePageState extends State<HomePage> {
                         Map<String, double> monthlyTotals = snapshot.data ?? {};
 
                         Map<int, double> monthlySummary = {};
+                        int startingMonth = now.month - 5;
+                        if (startingMonth < 0) {
+                          startingMonth = startingMonth + 12;
+                        }
 
-                        for (int i = 0; i <= 12; i++) {
-                          int year = (now.year - 1) + (now.month + i - 1) ~/ 12;
-                          int month = (startDateTime.month + i + 1) % 12 + 1;
+                        for (int i = 0; i < 6; i++) {
+                          int year = (now.year - 1) + (now.month + i + 6) ~/ 12;
+                          int month = (startingMonth + i) % 12;
 
                           String yearMonthKey = '$year-$month';
 
-                          monthlySummary[month] =
+                          monthlySummary[month - 1] =
                               monthlyTotals[yearMonthKey] ?? 0.0;
                         }
 
                         return BarGraph(
                             monthlySummary: monthlySummary,
-                            startMonth: startDateTime.month);
+                            startMonth: startingMonth);
                       }
 
                       return const Center(child: Text("Loading"));

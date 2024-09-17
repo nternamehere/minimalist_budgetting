@@ -3,6 +3,8 @@ import 'package:minimalist_budgetting/bar_graph/individual_bar.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'dart:math';
 
+import 'package:minimalist_budgetting/helpers/date_helpers.dart';
+
 class BarGraph extends StatefulWidget {
   final Map<int, double> monthlySummary;
   final int startMonth;
@@ -22,7 +24,7 @@ class _BarGraphState extends State<BarGraph> {
 
   void initializeBarData() {
     barData = List.generate(
-      12,
+      6,
       (index) => IndividualBar(
           x: widget.monthlySummary.keys.elementAt(index),
           y: widget.monthlySummary.values.elementAt(index)),
@@ -61,49 +63,8 @@ class _BarGraphState extends State<BarGraph> {
       fontWeight: FontWeight.bold,
       fontSize: 14,
     );
-    String text;
 
-    switch (value.toInt() % 12) {
-      case 0:
-        text = 'J';
-        break;
-      case 1:
-        text = 'F';
-        break;
-      case 2:
-        text = 'M';
-        break;
-      case 3:
-        text = 'A';
-        break;
-      case 4:
-        text = 'M';
-        break;
-      case 5:
-        text = 'J';
-        break;
-      case 6:
-        text = 'J';
-        break;
-      case 7:
-        text = 'A';
-        break;
-      case 8:
-        text = 'S';
-        break;
-      case 9:
-        text = 'O';
-        break;
-      case 10:
-        text = 'N';
-        break;
-      case 11:
-        text = 'D';
-        break;
-      default:
-        text = '';
-        break;
-    }
+    String text = monthNames[value.toInt() % 12];
 
     return SideTitleWidget(
       axisSide: meta.axisSide,
@@ -140,7 +101,7 @@ class _BarGraphState extends State<BarGraph> {
         return BarChartGroupData(x: data.x, barRods: [
           BarChartRodData(
               toY: data.y,
-              width: 20,
+              width: 40,
               borderRadius: BorderRadius.circular(4),
               color: Colors.grey[800]),
         ]);

@@ -23,6 +23,10 @@ int calculateMonthCount(DateTime current, DateTime start) {
 }
 
 String get currentMonthName {
+  return monthNames[DateTime.now().month - 1];
+}
+
+List<String> get monthNames {
   return [
     "JAN",
     "FEB",
@@ -36,5 +40,5 @@ String get currentMonthName {
     "OCT",
     "NOV",
     "DEC"
-  ][DateTime.now().month - 1];
+  ];
 }
