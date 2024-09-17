@@ -26,13 +26,13 @@ class ExpenseTile extends StatelessWidget {
             SlidableAction(
               onPressed: onEditPressed, 
               icon: Icons.edit,
-              backgroundColor: Colors.green,
+              backgroundColor: Colors.green[200]!,
               borderRadius: BorderRadius.circular(4)
             ),
             SlidableAction(
               onPressed: onDeletePressed, 
               icon: Icons.delete,
-              backgroundColor: Colors.red,
+              backgroundColor: Colors.grey[800]!,
               borderRadius: BorderRadius.circular(4)
             ),
           ]

@@ -159,7 +159,8 @@ class _HomePageState extends State<HomePage> {
         return Scaffold(
           floatingActionButton: FloatingActionButton(
             onPressed: openNewExpenseBox,
-            child: const Icon(Icons.add),
+            backgroundColor: Colors.grey[800],
+            child: const Icon(Icons.add, color: Colors.white),
           ),
           appBar: AppBar(
             centerTitle: true,
