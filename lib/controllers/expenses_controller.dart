@@ -52,19 +52,19 @@ class ExpenseController extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<Map<int, double>> calculateMonthlyTotals() async {
+  Future<Map<String, double>> calculateMonthlyTotals() async {
     await list();
 
-    Map<int, double> monthlyTotals = {};
+    Map<String, double> monthlyTotals = {};
 
     for (var expense in _expenses) {
-      int month = expense.date.month;
+      String yearMonth = '${expense.date.year}-${expense.date.month}';
 
-      if (!monthlyTotals.containsKey(month)) {
-        monthlyTotals[month] = 0;
+      if (!monthlyTotals.containsKey(yearMonth)) {
+        monthlyTotals[yearMonth] = 0;
       }
 
-      monthlyTotals[month] = monthlyTotals[month]! + expense.value;
+      monthlyTotals[yearMonth] = monthlyTotals[yearMonth]! + expense.value;
     }
 
     return monthlyTotals;
@@ -72,11 +72,26 @@ class ExpenseController extends ChangeNotifier {
 
   DateTime startDateTime() {
     if (_expenses.isEmpty) {
-      return DateTime.now();
+      DateTime now = DateTime.now();
+      return DateTime(now.year - 1, now.month, now.day);
     }
 
     _expenses.sort((a, b) => a.date.compareTo(b.date));
 
     return _expenses.first.date;
+  }
+
+  Future<double> calculateCurrentMonthTotal() async {
+    await list();
+
+    DateTime now = DateTime.now();
+
+    List<Expense> currentMonthExpenses = _expenses.where((expense) {
+      return expense.date.year == now.year && expense.date.month == now.month;
+    }).toList();
+
+    double total = currentMonthExpenses.fold(0, (sum, expense) => sum + expense.value);
+
+    return total;
   }
 }

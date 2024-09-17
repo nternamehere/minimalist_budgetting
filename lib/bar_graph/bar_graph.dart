@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:minimalist_budgetting/bar_graph/individual_bar.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'dart:math';
 
 class BarGraph extends StatefulWidget {
   final List<double> monthlySummary;
@@ -29,18 +30,29 @@ class _BarGraphState extends State<BarGraph> {
     );
   }
 
+  double get caclulateMax {
+    widget.monthlySummary.sort();
+
+    double highestMonthlySummary = widget.monthlySummary.last * 1.05;
+
+    return max(highestMonthlySummary, 500);
+  }
+
   @override
   Widget build(BuildContext context) {
     initializeBarData();
 
-    return BarChart(
-      BarChartData(
-        titlesData: titlesData,
-        borderData: borderData,
-        barGroups: barGroups,
-        gridData: const FlGridData(show: false),
-        alignment: BarChartAlignment.spaceAround,
-        maxY: 100,
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 12.0),
+      child: BarChart(
+        BarChartData(
+          titlesData: titlesData,
+          borderData: borderData,
+          barGroups: barGroups,
+          gridData: const FlGridData(show: false),
+          alignment: BarChartAlignment.spaceAround,
+          maxY: caclulateMax,
+        ),
       ),
     );
   }
@@ -53,7 +65,7 @@ class _BarGraphState extends State<BarGraph> {
     );
     String text;
 
-    switch (value.toInt()) {
+    switch (value.toInt() % 12) {
       case 0:
         text = 'J';
         break;
@@ -126,5 +138,16 @@ class _BarGraphState extends State<BarGraph> {
         show: false,
       );
 
-  List<BarChartGroupData> get barGroups => barData.map((data) => BarChartGroupData(x: data.x, barRods: [BarChartRodData(toY: data.y)])).toList();
+  List<BarChartGroupData> get barGroups => barData.map((data) {
+      return BarChartGroupData(
+        x: data.x, 
+        barRods: [
+          BarChartRodData(
+            toY: data.y,
+            width: 20,
+            borderRadius: BorderRadius.circular(4),
+            color: Colors.grey[800]
+          ),
+        ]);
+  }).toList();
 }
