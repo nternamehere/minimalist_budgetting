@@ -6,6 +6,7 @@ double stringToDouble(String string) {
 }
 
 String formatValue(double value) {
-  final NumberFormat format = NumberFormat.currency(locale: "en_US", symbol: "\$", decimalDigits: 2);
+  final NumberFormat format =
+      NumberFormat.currency(locale: "en_US", symbol: "\$", decimalDigits: 2);
   return format.format(value);
 }

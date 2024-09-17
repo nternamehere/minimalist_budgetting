@@ -90,7 +90,8 @@ class ExpenseController extends ChangeNotifier {
       return expense.date.year == now.year && expense.date.month == now.month;
     }).toList();
 
-    double total = currentMonthExpenses.fold(0, (sum, expense) => sum + expense.value);
+    double total =
+        currentMonthExpenses.fold(0, (sum, expense) => sum + expense.value);
 
     return total;
   }

@@ -20,32 +20,22 @@ class ExpenseTile extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 25),
       child: Slidable(
-        endActionPane: ActionPane(
-          motion: const StretchMotion(), 
-          children: [
-            SlidableAction(
-              onPressed: onEditPressed, 
+        endActionPane: ActionPane(motion: const StretchMotion(), children: [
+          SlidableAction(
+              onPressed: onEditPressed,
               icon: Icons.edit,
               backgroundColor: Colors.green[200]!,
-              borderRadius: BorderRadius.circular(4)
-            ),
-            SlidableAction(
-              onPressed: onDeletePressed, 
+              borderRadius: BorderRadius.circular(4)),
+          SlidableAction(
+              onPressed: onDeletePressed,
               icon: Icons.delete,
               backgroundColor: Colors.grey[800]!,
-              borderRadius: BorderRadius.circular(4)
-            ),
-          ]
-        ),
+              borderRadius: BorderRadius.circular(4)),
+        ]),
         child: Container(
           decoration: BoxDecoration(
-            color: Colors.grey[200], 
-            borderRadius: BorderRadius.circular(8)
-            ),
-          child: ListTile(
-            title: Text(title),
-            trailing: Text(value)
-          ),
+              color: Colors.grey[200], borderRadius: BorderRadius.circular(8)),
+          child: ListTile(title: Text(title), trailing: Text(value)),
         ),
       ),
     );

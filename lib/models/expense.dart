@@ -10,7 +10,6 @@ class Expense {
   String detail;
   double value;
   DateTime date;
-  // final category = IsarLink<Category>();
 
   Expense({required this.detail, required this.value, required this.date});
 }

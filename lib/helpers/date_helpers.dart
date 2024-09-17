@@ -17,7 +17,8 @@ DateTime dateFromString(String string) {
 }
 
 int calculateMonthCount(DateTime current, DateTime start) {
-  int monthCount = (current.year - start.year) * 12 + current.month - start.month + 1;
+  int monthCount =
+      (current.year - start.year) * 12 + current.month - start.month + 1;
   return monthCount;
 }
 

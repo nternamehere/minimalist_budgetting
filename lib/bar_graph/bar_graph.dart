@@ -4,7 +4,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'dart:math';
 
 class BarGraph extends StatefulWidget {
-  final List<double> monthlySummary;
+  final Map<int, double> monthlySummary;
   final int startMonth;
 
   const BarGraph({
@@ -22,18 +22,16 @@ class _BarGraphState extends State<BarGraph> {
 
   void initializeBarData() {
     barData = List.generate(
-      widget.monthlySummary.length, 
+      12,
       (index) => IndividualBar(
-        x: index, 
-        y: widget.monthlySummary[index]
-      ),
+          x: widget.monthlySummary.keys.elementAt(index),
+          y: widget.monthlySummary.values.elementAt(index)),
     );
   }
 
   double get caclulateMax {
-    widget.monthlySummary.sort();
-
-    double highestMonthlySummary = widget.monthlySummary.last * 1.05;
+    double highestMonthlySummary =
+        widget.monthlySummary.values.reduce(max) * 1.05;
 
     return max(highestMonthlySummary, 500);
   }
@@ -139,15 +137,12 @@ class _BarGraphState extends State<BarGraph> {
       );
 
   List<BarChartGroupData> get barGroups => barData.map((data) {
-      return BarChartGroupData(
-        x: data.x, 
-        barRods: [
+        return BarChartGroupData(x: data.x, barRods: [
           BarChartRodData(
-            toY: data.y,
-            width: 20,
-            borderRadius: BorderRadius.circular(4),
-            color: Colors.grey[800]
-          ),
+              toY: data.y,
+              width: 20,
+              borderRadius: BorderRadius.circular(4),
+              color: Colors.grey[800]),
         ]);
-  }).toList();
+      }).toList();
 }
